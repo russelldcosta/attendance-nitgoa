@@ -8,7 +8,8 @@ import {
   TouchableOpacity,
   Dimensions,
   Alert,
-  ActivityIndicator
+  ActivityIndicator,
+  Linking
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -205,6 +206,8 @@ export default function StudentAttendance() {
     }
   };
 
+
+
   const renderAttendanceCell = (status: string, index: number) => (
     <View 
       key={index}
@@ -316,6 +319,26 @@ export default function StudentAttendance() {
           )}
         </View>
       </View>
+
+        {/* ADD THE DOWNLOAD EXCEL BUTTON RIGHT HERE */}
+        <View style={{ alignItems: 'center', marginVertical: 10 }}>
+          <ThemedButton
+            title="Download Excel"
+            onPress={() => {
+              if (!classCode) return Alert.alert('Enter a class code first');
+              const url = `https://your-render-backend-url.onrender.com/attendance/download/${classCode}`;
+              Alert.alert(
+                'Download Attendance',
+                'Do you want to download the Excel file?',
+                [
+                  { text: 'Cancel', style: 'cancel' },
+                  { text: 'Download', onPress: () => Linking.openURL(url) },
+                ]
+              );
+            }}
+            style={{ paddingHorizontal: 20, borderRadius: 10 }}
+          />
+        </View>
       
       {/* Scrollable Content Area */}
       <ScrollView style={styles.contentContainer} showsVerticalScrollIndicator={false}>
