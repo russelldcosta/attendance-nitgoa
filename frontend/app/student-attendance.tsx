@@ -326,7 +326,7 @@ export default function StudentAttendance() {
             title="Download Excel"
             onPress={() => {
               if (!classCode) return Alert.alert('Enter a class code first');
-              const url = `https://your-render-backend-url.onrender.com/attendance/download/${classCode}`;
+              const url = `https://attendance-nitgoa.onrender.com/attendance/download/${classCode}`;
               Alert.alert(
                 'Download Attendance',
                 'Do you want to download the Excel file?',
