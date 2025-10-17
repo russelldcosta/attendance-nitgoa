@@ -13,5 +13,6 @@ starlette==0.47.2
 typing-extensions==4.14.1
 typing-inspection==0.4.1
 uvicorn==0.35.0
+pandas==2.2.3
 
 qrcode[pil]
