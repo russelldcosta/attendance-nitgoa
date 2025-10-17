@@ -320,25 +320,27 @@ export default function StudentAttendance() {
         </View>
       </View>
 
-        {/* ADD THE DOWNLOAD EXCEL BUTTON RIGHT HERE */}
-        <View style={{ alignItems: 'center', marginVertical: 10 }}>
-          <ThemedButton
-            title="Download Excel"
-            onPress={() => {
-              if (!classCode) return Alert.alert('Enter a class code first');
-              const url = `https://attendance-nitgoa.onrender.com/attendance/download/${classCode}`;
-              Alert.alert(
-                'Download Attendance',
-                'Do you want to download the Excel file?',
-                [
-                  { text: 'Cancel', style: 'cancel' },
-                  { text: 'Download', onPress: () => Linking.openURL(url) },
-                ]
-              );
-            }}
-            style={{ paddingHorizontal: 20, borderRadius: 10 }}
-          />
-        </View>
+    {/* ADD THE DOWNLOAD EXCEL BUTTON RIGHT HERE */}
+    {classCode ? (
+      <View style={{ alignItems: 'center', marginVertical: 10 }}>
+        <ThemedButton
+          title="Download Excel"
+          onPress={() => {
+            const url = `https://attendance-nitgoa.onrender.com/attendance/download/${classCode}`;
+            Alert.alert(
+              'Download Attendance',
+              'Do you want to download the Excel file?',
+              [
+                { text: 'Cancel', style: 'cancel' },
+                { text: 'Download', onPress: () => Linking.openURL(url) },
+              ]
+            );
+          }}
+          style={{ paddingHorizontal: 20, borderRadius: 10 }}
+        />
+      </View>
+    ) : null}
+
       
       {/* Scrollable Content Area */}
       <ScrollView style={styles.contentContainer} showsVerticalScrollIndicator={false}>
