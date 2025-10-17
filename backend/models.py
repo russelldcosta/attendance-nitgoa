@@ -2,11 +2,18 @@ import os
 from sqlalchemy import Column, Integer, String, Boolean, Date, ForeignKey, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+from dotenv import load_dotenv
 
 # uvicorn main:app --reload; creates tables
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 # Always store DB in backend/ so main.py and seed scripts use the same file
-DATABASE_URL = f"sqlite:///{os.path.join(BASE_DIR, 'database.db')}"
+# Build the connection URL
+load_dotenv()
+DATABASE_URL = (
+    f"postgresql+psycopg2://{os.getenv('POSTGRES_USER')}:{os.getenv('POSTGRES_PASSWORD')}"
+    f"@{os.getenv('POSTGRES_HOST')}:{os.getenv('POSTGRES_PORT')}/{os.getenv('POSTGRES_DB')}"
+)
+# DATABASE_URL = f"sqlite:///{os.path.join(BASE_DIR, 'database.db')}"
 
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
