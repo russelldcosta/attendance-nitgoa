@@ -156,6 +156,7 @@ export default function StudentAttendance() {
             { date: "2025-08-15", student_id: "20230002", student_name: "Jane Smith", status: "A" },
             { date: "2025-08-16", student_id: "20230001", student_name: "John Doe", status: "A" },
             { date: "2025-08-16", student_id: "20230002", student_name: "Jane Smith", status: "P" },
+            { date: "2025-08-16", student_id: "20230002", student_name: "JOHNNY Smith", status: "P" },
           ]
         };
         const transformedData = transformAttendanceData(sampleData);
