@@ -19,6 +19,11 @@ import { ThemedButton } from '@/components/ThemedButton';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { getAttendanceHistory, getClasses } from '@/utils/api';
 
+import RNFS from 'react-native-fs';
+import Share from 'react-native-share';
+import { Platform } from 'react-native';
+
+
 const { width: screenWidth } = Dimensions.get('window');
 
 // Types based on the backend API response
