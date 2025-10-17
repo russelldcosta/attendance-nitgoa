@@ -17,6 +17,7 @@ from datetime import date
 import threading
 import time
 from html_templates import ATTENDANCE_FORM_HTML, TOKEN_EXPIRED_HTML
+import pandas as pd
 
 app = FastAPI()
 
@@ -487,3 +488,53 @@ def cancel_qr(payload: dict = Body(...), db: Session = Depends(get_db)):
         "submitted_students": list(submitted_students),
         "errors": errors
     }
+
+
+
+
+
+@app.get("/attendance/download/{class_id}")
+def download_attendance_excel(class_id: str, db: Session = Depends(get_db)):
+    class_obj = db.query(models.Class).filter(models.Class.id == class_id).first()
+    if not class_obj:
+        raise HTTPException(status_code=404, detail="Class not found")
+
+    records = (
+        db.query(
+            models.Attendance.date,
+            models.Student.id.label("student_id"),
+            models.Student.name.label("student_name"),
+            models.Attendance.present,
+        )
+        .join(models.Student, models.Student.id == models.Attendance.student_id)
+        .filter(models.Attendance.class_id == class_obj.id)
+        .order_by(models.Attendance.date.asc(), models.Student.id.asc())
+        .all()
+    )
+
+    if not records:
+        raise HTTPException(status_code=404, detail="No attendance records found")
+
+    df = pd.DataFrame(
+        [
+            {
+                "Date": r.date,
+                "Student ID": r.student_id,
+                "Student Name": r.student_name,
+                "Status": "Present" if r.present else "Absent",
+            }
+            for r in records
+        ]
+    )
+
+    stream = io.BytesIO()
+    df.to_excel(stream, index=False, sheet_name="Attendance")
+    stream.seek(0)
+
+    return StreamingResponse(
+        stream,
+        media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        headers={
+            "Content-Disposition": f"attachment; filename={class_id}_attendance.xlsx"
+        },
+    )
